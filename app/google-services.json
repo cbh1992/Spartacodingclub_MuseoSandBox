@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "223915464408",
+    "project_id": "museosandbox",
+    "storage_bucket": "museosandbox.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223915464408:android:427481acc69431a742e9ad",
+        "android_client_info": {
+          "package_name": "com.android.museosandbox"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD44cs89lvCa2fzKpj0VdjWb6-oXDhfSAw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
