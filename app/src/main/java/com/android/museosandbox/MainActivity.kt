@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     var firestore: FirebaseFirestore? = null
     val itemList = arrayListOf<comment>()
     val adapter = ListAdapter(itemList)
-
+    val db = Firebase.firestore
     @SuppressLint("SuspiciousIndentation", "NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,18 +36,22 @@ class MainActivity : AppCompatActivity() {
         binding.RecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.RecyclerView.adapter = adapter
 
-        val db = Firebase.firestore
+
         firestore = FirebaseFirestore.getInstance()
+        adapter.notifyDataSetChanged()
         binding.Button.setOnClickListener {
 
-            val plusTime: LocalDate = LocalDate.now()
-            val formatter = DateTimeFormatter.ISO_DATE
-            val formatted = plusTime.format(formatter)
             val text = binding.Content.text.toString()
+            val date: LocalDate = LocalDate.now()
+            val formatdate = DateTimeFormatter.ISO_DATE
+            val formatteddate = date.format(formatdate)
+            val time =DateTimeFormatter.ISO_TIME
+            val formattime = date.format(time)
 
             val test = hashMapOf(
                 "text" to text,
-                "time" to formatted
+                "date" to formatteddate,
+                "time" to formattime
             )
 
             //데이터 저장하기
@@ -59,14 +63,16 @@ class MainActivity : AppCompatActivity() {
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
                 }
-
             //데이터 가져오기
             db.collection("Testing")
                 .get()
                 .addOnSuccessListener { result ->
+                    //중복출력 방지용 리사이클러뷰 초기화
+                    itemList.clear()
+                    //파이어스토어의 데이터를 가져오기
                     for (document in result) {
                         Log.d(TAG, "${document.id} => ${document.data}")
-                        val item = comment(document["text"] as String, document["time"] as String)
+                        val item = comment(document["text"] as String,document["date"] as String,document["time"] as String)
                         itemList.add(item)
                     }
                     adapter.notifyDataSetChanged()
@@ -75,5 +81,23 @@ class MainActivity : AppCompatActivity() {
                     Log.w(TAG, "Error getting documents.", exception)
                 }
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        db.collection("Testing")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                    val item = comment(document["text"] as String, document["date"] as String, document["time"] as String)
+                    itemList.add(item)
+                }
+                adapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.w(TAG, "Error getting documents.", exception)
+            }
     }
 }
