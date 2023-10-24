@@ -41,17 +41,14 @@ class MainActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
         binding.Button.setOnClickListener {
 
+            val plusTime: LocalDate = LocalDate.now()
+            val formatter = DateTimeFormatter.ISO_DATE
+            val formatted = plusTime.format(formatter)
             val text = binding.Content.text.toString()
-            val date: LocalDate = LocalDate.now()
-            val formatdate = DateTimeFormatter.ISO_DATE
-            val formatteddate = date.format(formatdate)
-            val time =DateTimeFormatter.ISO_TIME
-            val formattime = date.format(time)
 
             val test = hashMapOf(
                 "text" to text,
-                "date" to formatteddate,
-                "time" to formattime
+                "time" to formatted
             )
 
             //데이터 저장하기
@@ -69,10 +66,9 @@ class MainActivity : AppCompatActivity() {
                 .addOnSuccessListener { result ->
                     //중복출력 방지용 리사이클러뷰 초기화
                     itemList.clear()
-                    //파이어스토어의 데이터를 가져오기
                     for (document in result) {
                         Log.d(TAG, "${document.id} => ${document.data}")
-                        val item = comment(document["text"] as String,document["date"] as String,document["time"] as String)
+                        val item = comment(document["text"] as String, document["time"] as String)
                         itemList.add(item)
                     }
                     adapter.notifyDataSetChanged()
@@ -91,7 +87,7 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 for (document in result) {
                     Log.d(TAG, "${document.id} => ${document.data}")
-                    val item = comment(document["text"] as String, document["date"] as String, document["time"] as String)
+                    val item = comment(document["text"] as String, document["time"] as String)
                     itemList.add(item)
                 }
                 adapter.notifyDataSetChanged()

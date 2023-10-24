@@ -1,6 +1,5 @@
 package com.android.museosandbox
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,13 +18,11 @@ class ListAdapter(val itemList: ArrayList<comment>): RecyclerView.Adapter<ListAd
 
     override fun onBindViewHolder(holder: ListAdapter.ViewHolder, position: Int) {
         holder.text.text = itemList[position].text
-        holder.date.text = itemList[position].date
         holder.time.text = itemList[position].time
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val text: TextView = itemView.findViewById(R.id.Sub)
-        val date: TextView = itemView.findViewById(R.id.Date)
-        val time: TextView = itemView.findViewById(R.id.Time)
+        val time: TextView = itemView.findViewById(R.id.Date)
     }
 }
